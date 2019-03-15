@@ -48,6 +48,6 @@
         android:layout_marginRight="10dp"
         android:textColor="@color/color333333"
         android:visibility="visible"
-        tools:text="取消" />
+        tools:text="确定" />
 
 </RelativeLayout>

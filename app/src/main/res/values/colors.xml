@@ -16,4 +16,8 @@
     <color name="colorE8E4E5">#e8e4e5</color>
     <color name="color4D4D4D">#4D4D4D</color>
     <color name="colorF5F6F7">#F5F6F7</color>
+    <color name="color919191">#919191</color>
+    <color name="action_sheet_blue">#037BFF</color>
+    <color name="action_sheet_red">#FD4A2E</color>
+    <color name="action_sheet_gray">#8f8f8f</color>
 </resources>

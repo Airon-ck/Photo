@@ -1,16 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".SelectPhotoActivity">
+    tools:context=".select.SelectPhotoActivity">
 
-    <include layout="@layout/layout_toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar" />
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color000000"
+        android:clipChildren="true">
+
+        <TextView
+            android:id="@+id/txt_dir_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:text="所有图片"
+            android:textColor="@color/colorFFFFFF" />
+
+        <TextView
+            android:id="@+id/txt_photo_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="10dp"
+            android:text="0张"
+            android:textColor="@color/colorFFFFFF" />
+    </RelativeLayout>
+
+</RelativeLayout>

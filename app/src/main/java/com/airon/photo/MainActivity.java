@@ -1,9 +1,12 @@
 package com.airon.photo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,26 +19,83 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.airon.photo.select.SelectPhotoActivity;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ShowPicAdapter.OnItemClickListener, ShowPicAdapter.OnDeleteClickListener {
 
     protected int PERMISSIONS_REQUEST_CAMERA = 10011;
     protected String fileName;//拍摄得到的照片uri
     protected int REQ_Camear = 1101; //调用相机后返回的参数
     protected int REQ_Photos = 1103; //调用相册
     protected boolean hasPhoto = false;//是否添加照片
-    private String[] photos;//图片路径
+    private String[] photos = new String[3];//图片路径
+    private LinearLayout mBack;
+    private TextView tvTitle;
+    private RecyclerView mRecyclerView;
+    private List<String> ImageList = new ArrayList<>();
+    private ShowPicAdapter Adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ac_main);
+        initView();
+    }
+
+    private void initView() {
+        mBack = findViewById(R.id.back);
+        mBack.setVisibility(View.INVISIBLE);
+        tvTitle = findViewById(R.id.tvToolbarSubTitle);
+        tvTitle.setText(R.string.app_name);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        Adapter = new ShowPicAdapter(this, ImageList, 3);
+        mRecyclerView.setAdapter(Adapter);
+        Adapter.setOnItemClick(this);
+        Adapter.setOnDeleteClick(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == UCrop.REQUEST_CROP) {//裁切成功
+
+            } else if (requestCode == REQ_Camear) {//拍照成功
+
+            }
+        } else if (resultCode == REQ_Photos) {//选取相册成功
+            Bundle bundle = data.getExtras();
+            String[] data_list = (String[]) bundle.get("pic_list");
+
+        } else if (resultCode == UCrop.RESULT_ERROR) {//裁切失败
+            Toast.makeText(this, "裁切图片失败!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // 实例化UI 弹出界面
+    protected void ShowDialog(final String[] url) {
+        ActionSheetDialog dialog = new ActionSheetDialog(this);
+        dialog.builder()
+                .setCancelable(true)
+                .setCanceledOnTouchOutside(true)
+                .addSheetItem("拍照", ActionSheetDialog.SheetItemColor.Blue,
+                        which -> requestCameraAccess())
+                .addSheetItem("从手机相册选择", ActionSheetDialog.SheetItemColor.Blue,
+                        which -> requestPictureAccess(url));
+        dialog.show();
     }
 
     /**
@@ -178,4 +238,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View view, int position) {
+        ShowDialog(photos);
+    }
+
+    @Override
+    public void onDelete(View view, int position) {
+
+    }
 }
