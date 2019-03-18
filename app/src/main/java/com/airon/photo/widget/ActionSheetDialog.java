@@ -1,4 +1,4 @@
-package com.airon.photo;
+package com.airon.photo.widget;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.airon.photo.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +46,10 @@ public class ActionSheetDialog {
         view.setMinimumWidth(display.getWidth());
 
         // 获取自定义Dialog布局中的控件
-        sLayout_content = (ScrollView) view.findViewById(R.id.sLayout_content);
-        lLayout_content = (LinearLayout) view.findViewById(R.id.lLayout_content);
-        txt_title = (TextView) view.findViewById(R.id.txt_title);
-        txt_cancel = (TextView) view.findViewById(R.id.txt_cancel);
+        sLayout_content = view.findViewById(R.id.sLayout_content);
+        lLayout_content = view.findViewById(R.id.lLayout_content);
+        txt_title = view.findViewById(R.id.txt_title);
+        txt_cancel = view.findViewById(R.id.txt_cancel);
         txt_cancel.setOnClickListener(v -> dialog.dismiss());
 
         // 定义Dialog布局和参数
@@ -59,7 +61,6 @@ public class ActionSheetDialog {
         lp.x = 0;
         lp.y = 0;
         dialogWindow.setAttributes(lp);
-
         return this;
     }
 
@@ -89,7 +90,7 @@ public class ActionSheetDialog {
     public ActionSheetDialog addSheetItem(String strItem, SheetItemColor color,
                                           OnSheetItemClickListener listener) {
         if (sheetItemList == null) {
-            sheetItemList = new ArrayList<SheetItem>();
+            sheetItemList = new ArrayList<>();
         }
         sheetItemList.add(new SheetItem(strItem, color, listener));
         return this;
@@ -104,7 +105,7 @@ public class ActionSheetDialog {
     public ActionSheetDialog addSheetItems(List<String> strItems, SheetItemColor color,
                                            OnSheetItemClickListener listener) {
         if (sheetItemList == null)
-            sheetItemList = new ArrayList<SheetItem>();
+            sheetItemList = new ArrayList<>();
         for (int i = 0; i < strItems.size(); i++) {
             sheetItemList.add(new SheetItem(strItems.get(i), color, listener));
         }
@@ -118,7 +119,6 @@ public class ActionSheetDialog {
         if (sheetItemList == null || sheetItemList.size() <= 0) {
             return;
         }
-
         int size = sheetItemList.size();
 
         // TODO 高度控制，非最佳解决办法
@@ -220,7 +220,7 @@ public class ActionSheetDialog {
         Blue("#037BFF"), Red("#FD4A2E");
         private String name;
 
-        private SheetItemColor(String name) {
+        SheetItemColor(String name) {
             this.name = name;
         }
 

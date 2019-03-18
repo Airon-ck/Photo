@@ -1,5 +1,6 @@
 package com.airon.photo.select;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,8 +24,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.airon.photo.ImageBean;
+import com.airon.photo.entity.ImageBean;
 import com.airon.photo.R;
+import com.airon.photo.image.ViewBigImageActivity;
+import com.airon.photo.show.ShowBigPicActivity;
+import com.airon.photo.utils.CropUtils;
+import com.airon.photo.widget.ImageDirPopWindow;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,8 +41,8 @@ import java.util.Set;
 
 public class SelectPhotoActivity extends AppCompatActivity implements View.OnClickListener, SelectPhotoAdapter.OnItemClickListener, ImageDirPopWindow.OnDirSelectedListener, PopupWindow.OnDismissListener {
 
-    private TextView tvtitle, tvright, tvDirName, tvPhotoCount;
-    private LinearLayout linback;
+    private TextView tvTitle, tvRight, tvDirName, tvPhotoCount;
+    private LinearLayout mBack;
     private RelativeLayout bottom;
     private RecyclerView mRecyclerView;
     private List<ImageBean> FolderList = new ArrayList<>();
@@ -62,11 +68,13 @@ public class SelectPhotoActivity extends AppCompatActivity implements View.OnCli
         initData();
     }
 
+    @SuppressLint("SetTextI18n")
     private void initData() {
         pic_list = getIntent().getExtras().getStringArray("pic_list");
         CountOfEmpty = getIntent().getExtras().getInt("count");
         MaxSelect = pic_list.length;
         CountOfSelect = MaxSelect - CountOfEmpty;//已选择图片的数量
+        tvRight.setText("（" + CountOfSelect + "/" + MaxSelect + "）");
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Toast.makeText(this, "当前存储卡不可用!", Toast.LENGTH_SHORT).show();
             hasScanPhoto = false;
@@ -143,6 +151,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements View.OnCli
         mDirPopWindow.setOnDismissListener(this);
     }
 
+    @SuppressLint("SetTextI18n")
     private void AddDataToView() {
         if (mCurrentDir == null) {
             Toast.makeText(this, "未扫描到任何图片!", Toast.LENGTH_SHORT).show();
@@ -160,18 +169,18 @@ public class SelectPhotoActivity extends AppCompatActivity implements View.OnCli
         mRecyclerView.setAdapter(Adapter);
         Adapter.setOnItemClick(this);
         tvDirName.setText(mCurrentDir.getName());
-        tvPhotoCount.setText(String.valueOf(MaxPicCount));
+        tvPhotoCount.setText(String.valueOf(MaxPicCount) + "张");
     }
 
     private void initView() {
-        tvtitle = findViewById(R.id.tvToolbarSubTitle);
-        tvtitle.setText("选择图片");
-        tvright = findViewById(R.id.tvToolbarRight);
-        tvright.setOnClickListener(this);
+        tvTitle = findViewById(R.id.tvToolbarSubTitle);
+        tvTitle.setText("选择图片");
+        tvRight = findViewById(R.id.tvToolbarRight);
+        tvRight.setOnClickListener(this);
         tvDirName = findViewById(R.id.txt_dir_name);
         tvPhotoCount = findViewById(R.id.txt_photo_count);
-        linback = findViewById(R.id.back);
-        linback.setOnClickListener(this);
+        mBack = findViewById(R.id.back);
+        mBack.setOnClickListener(this);
         bottom = findViewById(R.id.bottom);
         bottom.setOnClickListener(this);
         mRecyclerView = findViewById(R.id.recyclerView);
@@ -194,17 +203,33 @@ public class SelectPhotoActivity extends AppCompatActivity implements View.OnCli
                 }
                 break;
             case R.id.tvToolbarRight:
-                Intent mIntent = new Intent();
-                mIntent.putExtra("pic_list", SelectPhotoAdapter.pic_list);
-                setResult(REQ_Photos, mIntent);
-                finish();
+//                Intent mIntent = new Intent();
+//                mIntent.putExtra("pic_list", SelectPhotoAdapter.pic_list);
+//                setResult(REQ_Photos, mIntent);
+//                finish();
                 break;
         }
     }
 
     @Override
-    public void onClick(View view, String url) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {//裁切成功
+            Intent mIntent = new Intent();
+            mIntent.putExtra("pic", CropUtils.SaveCropPic(data));
+            setResult(REQ_Photos, mIntent);
+            finish();
+        } else if (resultCode == UCrop.RESULT_ERROR) {//裁切失败
+            Toast.makeText(this, "裁切图片失败!", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    @Override
+    public void onClick(View view, String url) {
+//        Intent intent = new Intent(this, ShowBigPicActivity.class);
+//        intent.putExtra("Url", url);
+//        startActivity(intent);
+        ViewBigImageActivity.start(this, url, "查看大图");
     }
 
     @SuppressLint("SetTextI18n")
@@ -215,7 +240,7 @@ public class SelectPhotoActivity extends AppCompatActivity implements View.OnCli
         } else {
             CountOfSelect--;
         }
-        tvright.setText("（" + CountOfSelect + "/" + MaxSelect + "）确定");
+        tvRight.setText("（" + CountOfSelect + "/" + MaxSelect + "）");
     }
 
     @Override

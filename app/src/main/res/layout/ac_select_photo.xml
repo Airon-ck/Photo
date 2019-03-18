@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorF5F6F7"
     tools:context=".select.SelectPhotoActivity">
 
     <include
@@ -13,7 +14,9 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar" />
+        android:layout_below="@+id/toolbar"
+        android:layout_margin="1dp"
+        android:background="@color/colorFFFFFF" />
 
     <RelativeLayout
         android:id="@+id/bottom"
@@ -41,6 +44,7 @@
             android:paddingRight="10dp"
             android:text="0张"
             android:textColor="@color/colorFFFFFF" />
+
     </RelativeLayout>
 
 </RelativeLayout>

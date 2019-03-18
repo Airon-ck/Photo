@@ -1,4 +1,4 @@
-package com.airon.photo;
+package com.airon.photo.entity;
 
 public class ImageBean {
 
@@ -42,5 +42,4 @@ public class ImageBean {
     public void setCount(int count) {
         this.count = count;
     }
-
 }

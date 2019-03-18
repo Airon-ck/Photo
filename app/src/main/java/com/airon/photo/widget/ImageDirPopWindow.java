@@ -1,4 +1,4 @@
-package com.airon.photo.select;
+package com.airon.photo.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.airon.photo.ImageBean;
+import com.airon.photo.entity.ImageBean;
 import com.airon.photo.R;
 import com.bumptech.glide.Glide;
 
@@ -90,11 +90,12 @@ public class ImageDirPopWindow extends PopupWindow {
             return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_select_file, parent, false));
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Glide.with(context).load(mData.get(position).getFirstImgPath()).into(holder.ImgSelect);
             holder.tvSelectFile.setText(mData.get(position).getName());
-            holder.tvSelectCount.setText(String.valueOf(mData.get(position).getCount()));
+            holder.tvSelectCount.setText(String.valueOf(mData.get(position).getCount()) + "张");
         }
 
         @Override
