@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.airon.photo.entity.ImageBean;
 import com.airon.photo.R;
 import com.airon.photo.image.ViewBigImageActivity;
-import com.airon.photo.show.ShowBigPicActivity;
 import com.airon.photo.utils.CropUtils;
 import com.airon.photo.widget.ImageDirPopWindow;
 import com.yalantis.ucrop.UCrop;
@@ -226,9 +225,6 @@ public class SelectPhotoActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view, String url) {
-//        Intent intent = new Intent(this, ShowBigPicActivity.class);
-//        intent.putExtra("Url", url);
-//        startActivity(intent);
         ViewBigImageActivity.start(this, url, "查看大图");
     }
 

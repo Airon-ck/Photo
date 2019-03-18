@@ -15,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".show.ShowBigPicActivity" />
         <activity android:name=".select.SelectPhotoActivity" />
         <activity android:name=".image.ViewBigImageActivity"
             android:screenOrientation="portrait"
